@@ -64,4 +64,56 @@ fun dates_in_months (dates: (int * int * int) list, months: int list) =
 
 (* 6 *)
 fun get_nth (ss: string list, n: int) =
-    8
+    if n = 1
+    then hd ss
+    else get_nth(tl ss, n - 1)
+		
+(* 7 *)
+fun date_to_string (date: int * int * int) =
+    let
+	val months = ["January", "February", "March", "April", "May", "June", "July",
+		      "August", "September", "October", "November", "December"]		 
+    in
+	get_nth(months, #2 date) ^ " " ^ Int.toString(#3 date) ^ ", " ^ Int.toString(#1 date) 
+    end
+
+(* 8 *)
+fun number_before_reaching_sum (sum: int, nums: int list) =
+    let
+	fun calculate (currentSum: int, n: int, nums: int list) =
+	    if currentSum > sum orelse currentSum = sum
+	    then n - 1
+	    else calculate(currentSum + hd nums, n + 1, tl nums)
+    in
+	calculate(0, 0, nums)
+    end
+
+(* 9 *)
+fun what_month (day: int) =
+    let
+	(* the question says 1-365, so assume Feb is 28 *)
+	val daysInMonths = [31,28,31,30,31,30,31,31,30,31,30,31]
+    in
+	number_before_reaching_sum(day, daysInMonths) + 1
+    end
+	
+(* 10 *)
+fun month_range (day1: int, day2: int) =
+    if day1 > day2
+    then []
+    else what_month(day1) :: month_range(day1 + 1, day2)
+			  
+(* 11 *)
+fun oldest (dates: (int * int * int) list) =
+    if null dates
+    then NONE
+    else
+	let val currentOldest = oldest(tl dates)
+	in
+	    if isSome currentOldest andalso is_older(valOf currentOldest, hd dates)
+	    then currentOldest
+	    else SOME (hd dates)
+	end
+	    
+			     
+			      
