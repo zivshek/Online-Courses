@@ -114,6 +114,26 @@ fun oldest (dates: (int * int * int) list) =
 	    then currentOldest
 	    else SOME (hd dates)
 	end
+
+(* 12 Challenge *)
+(* already did question 3 and 5 the "challenge" way *)
+
+(* 13 Challenge *)
+fun reasonable_date (date: int * int * int) =
+    if #1 date < 0 orelse #2 date < 1 orelse #2 date > 12 orelse #3 date < 0
+    then false
+    else
+	let
+	    fun is_leap (year: int) =
+		(year mod 400) = 0 orelse ((year mod 4) = 0 andalso (year mod 100) > 0)
+	in
+	    if #2 date = 2 andalso is_leap(#1 date)
+	    then #3 date < 30
+	    else if #2 date = 2
+	    then #3 date < 29
+	    else if ((#2 date - 1) mod 7) mod 2 = 0
+	    then #3 date < 32
+	    else #3 date < 31
+	end
 	    
-			     
-			      
+						   
