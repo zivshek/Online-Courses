@@ -7,6 +7,7 @@ fun same_string(s1 : string, s2 : string) =
     s1 = s2
 
 (* put your solutions for problem 1 here *)
+	     (* 1.a *)
 fun all_except_option (s, ss) =
     case ss of
 	[] => NONE
@@ -15,10 +16,30 @@ fun all_except_option (s, ss) =
 		  else
 		      case all_except_option(s, ss') of
 			  NONE => NONE
-			| SOME ss' => SOME(x::ss')
-					  
-					   
+			| SOME ss' => SOME(x::ss')					   
 
+(* 1.b *)
+fun get_substitutions1 (slistlist, s) =
+    case slistlist of
+	[] => []
+      | firstList::restList => case all_except_option(s, firstList) of
+				   NONE => get_substitutions1(restList, s)
+				 | SOME ss => ss @ get_substitutions1(restList, s)
+
+(* 1.c *)
+fun get_substitutions2 (slistlist, s) =
+    let
+	fun aux (sll, acc) =
+	    case sll of
+		[] => acc
+	      | firstList::restList => case all_except_option(s, firstList) of
+					   NONE => aux(restList, acc)
+					 | SOME ss => aux(restList, acc @ ss)
+    in
+	aux(slistlist, [])
+    end
+	
+								      
 (* you may assume that Num is always used with values 2, 3, ..., 10
    though it will not really come up *)
 datatype suit = Clubs | Diamonds | Hearts | Spades
