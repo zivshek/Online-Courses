@@ -38,6 +38,19 @@ fun get_substitutions2 (slistlist, s) =
     in
 	aux(slistlist, [])
     end
+
+(* 1.d *)
+fun similar_names (sll, fullname) =
+    let
+	fun aux (ss, l, m, acc) =
+	    case ss of
+		[] => acc
+	      | x::xs' => aux(xs', l, m, acc @ [{first = x, last = l, middle = m}])
+    in
+	(* omg, finally got this pattern matching correct... even though passing last and middle looks very stupid... *)
+	case fullname of
+	    {first, last, middle} => aux(get_substitutions2(sll, first), last, middle, [fullname])
+    end
 	
 								      
 (* you may assume that Num is always used with values 2, 3, ..., 10
