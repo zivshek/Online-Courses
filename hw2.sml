@@ -40,16 +40,14 @@ fun get_substitutions2 (slistlist, s) =
     end
 
 (* 1.d *)
-fun similar_names (sll, fullname) =
+fun similar_names (sll, {first, last, middle}) =
     let
-	fun aux (ss, l, m, acc) =
+	fun aux (ss, acc) =
 	    case ss of
 		[] => acc
-	      | x::xs' => aux(xs', l, m, acc @ [{first = x, last = l, middle = m}])
+	      | x::xs' => aux(xs', acc @ [{first = x, last = last, middle = middle}])
     in
-	(* omg, finally got this pattern matching correct... even though passing last and middle looks very stupid... *)
-	case fullname of
-	    {first, last, middle} => aux(get_substitutions2(sll, first), last, middle, [fullname])
+	aux(get_substitutions2(sll, first), [{first = first, last = last, middle = middle}])
     end
 	
 								      
@@ -65,3 +63,65 @@ datatype move = Discard of card | Draw
 exception IllegalMove
 
 (* put your solutions for problem 2 here *)
+fun card_color (suit, rank) =
+    case suit of
+	Clubs => Black
+      | Spades => Black
+      | Diamonds => Red
+      | Hearts => Red
+
+fun card_value (suit, rank) =
+    case rank of
+	Num i => i
+      | Ace => 11
+      | _ => 10
+
+fun remove_card (cards, card, e) =
+    let
+	fun aux (cards, (result, found)) =
+	    case cards of
+		[] => (result, found)
+	      | c::rest => if c = card
+			   then (result @ rest, true)
+			   else aux(rest, (c::result, false))
+    in
+	case aux(cards, ([], false)) of
+	    (_, false) => raise e
+	 | (result, _) => result
+    end
+	
+fun all_same_color cards =
+    case cards of
+	[] => true
+      | _::[] => true
+      | head::(neck::rest) => if card_color(head) = card_color(neck)
+			      then all_same_color(neck::rest)
+			      else false
+				       
+fun sum_cards cards =
+    let
+	fun aux (cards, sum) =
+	    case cards of
+		[] => sum
+	      | head::rest => aux(rest, sum + card_value(head))
+    in
+	aux(cards, 0)
+    end
+
+fun score (cards, goal) =
+    let
+	fun preliminary_score cards  =
+	    case sum_cards(cards) of
+		sum => if sum > goal
+		       then 3 * (sum - goal)
+		       else goal - sum
+    in
+	if all_same_color cards
+	then preliminary_score(cards) div 2
+	else preliminary_score cards
+    end
+
+(* fun officiate (cards, moves, goal) = *)
+    
+	
+	
