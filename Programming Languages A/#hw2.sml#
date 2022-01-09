@@ -135,5 +135,3 @@ fun officiate (deck, moves, goal) =
 	play(deck, moves, [])
     end
 	
-	
-	
