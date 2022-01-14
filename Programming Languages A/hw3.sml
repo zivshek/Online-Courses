@@ -121,15 +121,23 @@ fun check_pat p =
 
 (*11*)
 fun match (v, p) =
-    case p of
-	Wildcard => SOME []
-      | Variable s => SOME [(s, v)]
-      | UnitP => case v of
-		     Unit => SOME []
-		   | _ => NONE
-      | ConstP cp => case v of
-			 Const cv => if cv = cp then SOME [] else NONE
-		       | _ => NONE
-(*      | TupleP ps => case v of*)
+    case (v, p) of
+	(_, Wildcard) => SOME []
+      | (_, Variable s) => SOME [(s, v)]
+      | (Unit, UnitP) => SOME []
+      | (Const cv, ConstP cp) => if cv = cp then SOME [] else NONE
+      | (Tuple vs, TupleP ps) => if (List.length vs) = (List.length ps)
+				 then all_answers match (ListPair.zip(vs, ps))
+				 else NONE
+      | (Constructor(sv, vv), ConstructorP(sp, pp)) => if sv = sp
+						       then match(vv, pp)
+						       else NONE
+      | (_, _) => NONE
 					  
-										   
+(*12*)
+fun first_match v ps =
+    case ps of
+	[] => NONE
+      | p::ps' => case match (v, p) of
+		      NONE => first_match v ps'
+		   | SOME x => SOME x
