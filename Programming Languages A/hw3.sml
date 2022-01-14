@@ -14,18 +14,6 @@ datatype valu = Const of int
 	      | Tuple of valu list
 	      | Constructor of string * valu
 
-fun g f1 f2 p =
-    let 
-	val r = g f1 f2 
-    in
-	case p of
-	    Wildcard          => f1 ()
-	  | Variable x        => f2 x
-	  | TupleP ps         => List.foldl (fn (p,i) => (r p) + i) 0 ps
-	  | ConstructorP(_,p) => r p
-	  | _                 => 0
-    end
-
 (**** for the challenge problem only ****)
 
 datatype typ = Anything
@@ -74,7 +62,7 @@ fun first_answer f xs =
 		      SOME v => v
 		   | NONE => first_answer f xs'
 
-					  (*8*)
+(*8*)
 fun all_answers f xs =
     let
 	fun aux (xs, acc) =
@@ -86,4 +74,62 @@ fun all_answers f xs =
     in
 	aux (xs, [])
     end
+
+(* Moving here for easier referencing *)
+fun g f1 f2 p =
+    let 
+	val r = g f1 f2 
+    in
+	case p of
+	    Wildcard          => f1 () (* did some research, () actually means uint... wth? *)
+	  | Variable x        => f2 x
+	  | TupleP ps         => List.foldl (fn (p,i) => (r p) + i) 0 ps
+	  | ConstructorP(_,p) => r p
+	  | _                 => 0
+    end
 	
+(*9a*)
+fun count_wildcards p = g (fn u => 1) (fn s => 0) p
+
+(*9b*)
+fun count_wild_and_variable_lengths p =
+    g (fn u => 1) (fn s => String.size s) p
+
+(*9c*)
+fun count_some_var (s, p) =
+    g (fn u => 0) (fn s2 => if s2 = s then 1 else 0) p
+    
+(*10*)
+fun check_pat p =
+    let
+	fun get_all_variables p =
+	    case p of
+		Variable x => [x]
+	      | TupleP ps => List.foldl (fn (p, i) => (get_all_variables p) @ i) [] ps
+	      | ConstructorP(_,p) => get_all_variables p
+	      | _ => []
+
+	fun has_repeats xs =
+	    case xs of
+		[] => false
+	      | x::xs' => if List.exists (fn s => s = x) xs'
+			  then true
+			  else has_repeats xs'
+    in
+	Bool.not(has_repeats(get_all_variables p))
+    end
+
+(*11*)
+fun match (v, p) =
+    case p of
+	Wildcard => SOME []
+      | Variable s => SOME [(s, v)]
+      | UnitP => case v of
+		     Unit => SOME []
+		   | _ => NONE
+      | ConstP cp => case v of
+			 Const cv => if cv = cp then SOME [] else NONE
+		       | _ => NONE
+(*      | TupleP ps => case v of*)
+					  
+										   
