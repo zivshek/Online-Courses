@@ -35,7 +35,7 @@ fun longest_string1 xs = List.foldl (fn (x, y) =>
 
 (* 3 *)
 fun longest_string2 xs = List.foldl (fn (x, y) =>
-					if String.size(x) <= String.size(y)
+					if String.size(x) >= String.size(y)
 					then x		 
 					else y) "" xs
 
