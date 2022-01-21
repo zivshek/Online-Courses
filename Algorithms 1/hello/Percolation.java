@@ -1,41 +1,19 @@
 /* *****************************************************************************
  *  Name:              Hao Shi
  *  Coursera User ID:  ziv.hao.shek@gmail.com
- *  Last modified:     Jan 18, 2022
+ *  Last modified:     Jan 20, 2022
  **************************************************************************** */
 
-import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
-    private class Node {
-        private int value;
-        private boolean isOpen = false;
-
-        public Node(int value) {
-            this.setValue(value);
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-        public void setValue(int value) {
-            this.value = value;
-        }
-
-        public boolean isOpen() {
-            return isOpen;
-        }
-
-        public void setOpen(boolean open) {
-            isOpen = open;
-        }
-    }
-
-    private int n;
-    private Node[] sites;
+    private final int n;
+    private final boolean[] sites;
+    private final WeightedQuickUnionUF uf;
     private int openCount = 0;
+    private final int top;
+    private final int bottom;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
@@ -46,9 +24,15 @@ public class Percolation {
         this.n = n;
         // flatten the grid and use helper functions to get the correct index from row and col or vice versa
         int total = n * n;
-        sites = new Node[total];
-        for (int i = 0; i < total; i++) {
-            sites[i] = new Node(i);
+        top = total;
+        bottom = total + 1;
+        sites = new boolean[total];
+        uf = new WeightedQuickUnionUF(total + 2);
+        for (int i = 0; i < n; i++) {
+            uf.union(i, top);
+        }
+        for (int i = (n - 1) * n; i < total; i++) {
+            uf.union(i, bottom);
         }
     }
 
@@ -57,18 +41,18 @@ public class Percolation {
         checkBoundary(row, col);
         if (!isOpen(row, col)) {
             int index = getIndex(row, col);
-            getNode(index).setOpen(true);
+            sites[index] = true;
             openCount++;
 
-            int[] rows = new int[] { row - 1, row, row + 1, row }; // up, right, bottom, left
-            int[] cols = new int[] { col, col + 1, col, col - 1 };
-            for (int i = 0; i < 4; i++) {
+            int[] rows = { row - 1, row, row + 1, row }; // up, right, bottom, left
+            int[] cols = { col, col + 1, col, col - 1 };
+            for (int i = 0; i < rows.length; i++) {
                 int r = rows[i];
                 int c = cols[i];
                 if (isValid(r, c)) {
                     int otherIndex = getIndex(r, c);
-                    if (getNode(otherIndex).isOpen() && !connected(index, otherIndex)) {
-                        union(index, otherIndex);
+                    if (sites[otherIndex] && uf.find(index) != uf.find(otherIndex)) {
+                        uf.union(index, otherIndex);
                     }
                 }
             }
@@ -78,13 +62,14 @@ public class Percolation {
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
         checkBoundary(row, col);
-        return getNode(row, col).isOpen();
+        return sites[getIndex(row, col)];
     }
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
         checkBoundary(row, col);
-        return !getNode(row, col).isOpen();
+        final int i = getIndex(row, col);
+        return sites[i] && (uf.find(top) == uf.find(i));
     }
 
     // returns the number of open sites
@@ -94,15 +79,8 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (getNode(i).isOpen() && getNode(n, j + 1).isOpen() && connected(i, getIndex(n, j
-                        + 1))) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        if (n == 1) return isOpen(1, 1);
+        return uf.find(top) == uf.find(bottom);
     }
 
     private void checkBoundary(int row, int col) {
@@ -111,49 +89,12 @@ public class Percolation {
         }
     }
 
-    private void union(int p, int q) {
-        int i = root(p);
-        int j = root(q);
-        if (i == j) return;
-        getNode(i).setValue(j);
-    }
-
-    private boolean connected(int p, int q) {
-        return root(p) == root(q);
-    }
-
-    private int root(int i) {
-        while (i != getNode(i).getValue()) {
-            i = getNode(i).getValue();
-        }
-        return i;
-    }
-
     private boolean isValid(int row, int col) {
         return row >= 1 && col >= 1 && row <= n && col <= n;
-    }
-
-    private Node getNode(int index) {
-        return sites[index];
-    }
-
-    private Node getNode(int row, int col) {
-        return getNode(getIndex(row, col));
     }
 
     // row and col starts from 1, need to account for that
     private int getIndex(int row, int col) {
         return (row - 1) * n + (col - 1);
-    }
-
-    public static void main(String[] args) {
-        int n = 100;
-        Percolation percolation = new Percolation(n);
-        while (!percolation.percolates()) {
-            int randomRow = StdRandom.uniform(1, n + 1);
-            int randomCol = StdRandom.uniform(1, n + 1);
-            percolation.open(randomRow, randomCol);
-        }
-        System.out.println(percolation.numberOfOpenSites() / (double) (n * n));
     }
 }
