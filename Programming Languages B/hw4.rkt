@@ -56,7 +56,7 @@
 ; 9
 (define (vector-assoc v vec)
   (letrec ([f (lambda (vec)
-                (cond [(or (null? vec) (vector-empty? vec)) #f]
+                (cond [(or (null? vec) (= (vector-length vec) 0)) #f]
                       [#t (letrec ([len (vector-length vec)]
                                    [hd (vector-ref vec 0)]
                                    [tail (vector-take-right vec (- len 1))])
