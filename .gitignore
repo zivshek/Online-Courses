@@ -11,13 +11,13 @@ compiled/
 build/
 
 # Java
-*.class
+#*.class
 *.log
 *.jar
 *.war
 *.nar
 *.ear
-*.zip
+#*.zip
 *.tar.gz
 *.rar
 
