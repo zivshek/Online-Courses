@@ -11,7 +11,15 @@ compiled/
 build/
 
 # Java
-#*.class
+*.class
+*.log
+*.jar
+*.war
+*.nar
+*.ear
+#*.zip
+*.tar.gz
+*.rar
 
 # Local configuration file (sdk path, etc)
 local.properties
