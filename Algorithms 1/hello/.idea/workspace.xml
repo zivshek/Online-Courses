@@ -78,7 +78,7 @@
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="settings.saveactions" />
   </component>
-  <component name="RunManager" selected="Application.Deque">
+  <component name="RunManager" selected="Application.RandomizedQueue">
     <configuration name="Deque" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Deque" />
       <module name="Algorithms, Part I" />
@@ -100,8 +100,32 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Permutation" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Permutation" />
+      <module name="Algorithms, Part I" />
+      <option name="PROGRAM_PARAMETERS" value="8 queue.txt" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RandomizedQueue" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="RandomizedQueue" />
+      <module name="Algorithms, Part I" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="StdIn" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="StdIn" />
+      <module name="Algorithms, Part I" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.RandomizedQueue" />
+        <item itemvalue="Application.StdIn" />
         <item itemvalue="Application.Deque" />
         <item itemvalue="Application.PercolationStats" />
         <item itemvalue="Application.Percolation" />
