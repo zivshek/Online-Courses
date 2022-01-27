@@ -5,7 +5,10 @@
  **************************************************************************** */
 
 import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdRandom;
+
+import java.util.Arrays;
 
 public class ElementarySorting {
 
@@ -56,7 +59,19 @@ public class ElementarySorting {
     }
 
     public static void convexHull(Point2D[] points) {
-        
+        Stack<Point2D> hull = new Stack<>();
+        Arrays.sort(points, Point2D.Y_ORDER);
+        Arrays.sort(points, points[0].polarOrder());
+        hull.push(points[0]);
+        hull.push(points[1]);
+        for (int i = 2; i < points.length; i++) {
+            Point2D top = hull.pop();
+            while (Point2D.ccw(hull.peek(), top, points[i]) <= 0) {
+                top = hull.pop();
+            }
+            hull.push(top);
+            hull.push(points[i]);
+        }
     }
 
     private static boolean less(Comparable a, Comparable b) {
