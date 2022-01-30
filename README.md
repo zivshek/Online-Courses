@@ -7,7 +7,7 @@ Courses | Platform | Duration | Effort | Actual Hours Spent | My Thoughts
 :-- | :--: | :--: | :--: | :--: | :--
 [Programming Languages, Part A](https://www.coursera.org/learn/programming-languages) | Coursera | 5 weeks | 4-8 hrs/w | 16-18 hrs | Beyond fantastic! Don't let the initial setup scare you, I know it's a new unheard language, but once you started the actual course, you won't regret. Extremely well structured and delievered.
 [Programming Languages, Part B](https://www.coursera.org/learn/programming-languages-part-b) | Coursera | 3 weeks | 4-8 hrs/w | w1 - 6h | Not finished yet, currently on week 2
-[Algorithms, Part 1](https://www.coursera.org/learn/algorithms-part1) | Coursera | 6 weeks | 9-11 hrs/w | w1 - 8h w2 - 5h | Not finished yet, currently on week 2
+[Algorithms, Part 1](https://www.coursera.org/learn/algorithms-part1) | Coursera | 6 weeks | 9-11 hrs/w | w1 - 8h w2 - 6h | Not finished yet, currently on week 3
 [Algorithms, Part 2](https://www.coursera.org/learn/algorithms-part2) | Coursera | 6 weeks | 10-12 hrs/w | | Not started
 [Database Design and Basic SQL in PostgreSQL](https://www.coursera.org/learn/database-design-postgresql) | Coursera | 4 weeks | 3.5 hrs/w | w1 - 2h | Currently on week 2
 [Design Patterns](https://www.coursera.org/learn/design-patterns) | Coursera | 4 weeks | 3-4 hrs/w | w1 - 2h w2 - 2h | Currently on week 3
