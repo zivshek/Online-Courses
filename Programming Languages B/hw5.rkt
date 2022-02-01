@@ -28,6 +28,12 @@
       (aunit)
       (apair (car rl) (racketlist->mupllist (cdr rl)))))
 
+; b
+(define (mupllist->racketlist ml)
+  (if (aunit? ml)
+      null
+      (cons (apair-e1 ml) (mupllist->racketlist (apair-e2 ml)))))
+
 ;; Problem 2
 
 ;; lookup a variable in an environment
@@ -53,6 +59,26 @@
                        (int-num v2)))
                (error "MUPL addition applied to non-number")))]
         ;; CHANGE add more cases here
+        [(int? e) e]
+        [(ifgreater? e)
+         (let ([v1 (eval-under-env (ifgreater-e1 e) env)]
+               [v2 (eval-under-env (ifgreater-e2 e) env)])
+           (if (and (int? v1)
+                    (int? v2))
+               (if (> (int-num v1) (int-num v2))
+                   (eval-under-env (ifgreater-e3 e) env)
+                   (eval-under-env (ifgreater-e4 e) env))
+               (error "MUPL if greater comparison applied to non-number")))]
+        [(fun? e) (closure env e)]
+        [(closure? e) e]
+        [(call? e)
+         (let ([v1 (eval-under-env (call-funexp e) env)])
+           (if (closure? v1)
+               (let ([theFun (closure-fun v1)]
+                     [theEnv (closure-env v1)])
+                 ())
+               (error "MUPL call expects a closure")))]
+         
         [#t (error (format "bad MUPL expression: ~v" e))]))
 
 ;; Do NOT change
