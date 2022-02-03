@@ -2,6 +2,7 @@
 
 #lang racket
 (provide (all-defined-out)) ;; so we can put tests in a second file
+(require rackunit)
 
 ;; definition of structures for MUPL programs - Do NOT change
 (struct var  (string) #:transparent)  ;; a variable, e.g., (var "foo")
@@ -74,11 +75,39 @@
         [(call? e)
          (let ([v1 (eval-under-env (call-funexp e) env)])
            (if (closure? v1)
-               (let ([theFun (closure-fun v1)]
+               (letrec ([theParam (eval-under-env (call-actual e) env)]
+                     [theFun (closure-fun v1)]
+                     [funName (fun-nameopt theFun)]
+                     [arg (fun-formal theFun)]
+                     [body (fun-body theFun)]
                      [theEnv (closure-env v1)])
-                 ())
+                 (if (equal? funName #f)
+                     (eval-under-env body (cons (cons arg theParam) theEnv))
+                     (eval-under-env body (cons (cons (cons funName closure) (cons arg theParam)) theEnv))))
                (error "MUPL call expects a closure")))]
-         
+        [(mlet? e)
+         (let ([varName (mlet-var e)]
+               [varVal (eval-under-env (mlet-e e) env)]
+               [body (mlet-body e)])
+           (eval-under-env body (cons (cons varName varVal) env)))]
+        [(apair? e)
+         (apair (eval-under-env (apair-e1 e) env) (eval-under-env (apair-e2 e) env))]
+        [(fst? e)
+         (let ([v (eval-under-env (fst-e e) env)])
+           (if (apair? v)
+               (apair-e1 v)
+               (error "MUPL fst expects an apair")))]
+        [(snd? e)
+         (let ([v (eval-under-env (snd-e e) env)])
+           (if (apair? v)
+               (apair-e2 v)
+               (error "MUPL snd expects an apair")))]
+        [(aunit? e) e]
+        [(isaunit? e)
+         (let ([v (eval-under-env (isaunit-e e) env)])
+           (if (aunit? v)
+               (int 1)
+               (int 0)))]
         [#t (error (format "bad MUPL expression: ~v" e))]))
 
 ;; Do NOT change

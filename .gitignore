@@ -1,6 +1,7 @@
 *.sml~
 \#*
 .\#*
+*.2
 compiled/
 
 *.bak
