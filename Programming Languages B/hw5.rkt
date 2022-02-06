@@ -80,10 +80,10 @@
                      [funName (fun-nameopt theFun)]
                      [arg (fun-formal theFun)]
                      [body (fun-body theFun)]
-                     [theEnv (closure-env v1)])
+                     [theEnv (cons (cons arg theParam) (closure-env v1))]) ; local env with the parameter
                  (if (equal? funName #f)
-                     (eval-under-env body (cons (cons arg theParam) theEnv))
-                     (eval-under-env body (cons (cons (cons funName closure) (cons arg theParam)) theEnv))))
+                     (eval-under-env body theEnv)
+                     (eval-under-env body (cons (cons funName v1) theEnv)))) ; if the funName exists, expand the local env with it
                (error "MUPL call expects a closure")))]
         [(mlet? e)
          (let ([varName (mlet-var e)]
@@ -132,12 +132,19 @@
              
 
 ;; Problem 4
-
-(define mupl-map "CHANGE")
+; fun  (nameopt formal body)
+(define mupl-map
+  (fun #f "func"
+       (fun "map-func" "list"
+            (ifaunit (var "list")
+                     (aunit)
+                     (apair (call (var "func") (fst (var "list")))
+                            (call (var "map-func") (snd (var "list"))))))))
 
 (define mupl-mapAddN 
   (mlet "map" mupl-map
-        "CHANGE (notice map is now in MUPL scope)"))
+        (fun #f "i"
+             (call (var "map") (fun #f "x" (add (var "x") (var "i")))))))
 
 ;; Challenge Problem
 
