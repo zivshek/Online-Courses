@@ -15,4 +15,5 @@ Courses | Platform | Duration | Effort | Actual Hours Spent | My Thoughts
 [Mathematical Thinking in Computer Science](https://www.coursera.org/learn/what-is-a-proof) | Coursera | 6 weeks | 6-8 hrs/w | w1 - 3h | Currently on week 2
 [Introduction to Calculus](https://www.coursera.org/learn/introduction-to-calculus) | Coursera | 5 weeks | 11-14 hrs/w | | Currently on week 1
 [The Bits and Bytes of Computer Networking](https://www.coursera.org/learn/computer-networking) | Coursera | 6 weeks | 5-6 hrs/w | | Not started
+[HTML, CSS, and JavaScript for Web Developers] | | | | |
 [Getting Started with Essay Writing](https://www.coursera.org/learn/getting-started-with-essay-writing) | Coursera | 5 weeks | 4-5 hrs/w | | Not started
